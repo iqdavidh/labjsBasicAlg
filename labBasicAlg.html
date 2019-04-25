@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>labBasicaLG</title>
+</head>
+<body>
+<pre id="panInstrucciones"></pre>
+<script type="application/javascript" src="/app.js"></script>
+
+<script>
+    "use strict";
+
+    let pro = new Procesador();
+    let f = new Date();
+    console.log("I'm Ready " + f.toString());
+
+
+    let listaOpciones = [
+        {
+            index: 1,
+            texto: "Indicar el nombre del driver",
+            fnInput: function (pro, input) {
+                return pro.setDriverName(input)
+            },
+            fnPostInput: function (pro) {
+                let s = pro.getDriverName();
+                console.log("driver name: " + s);
+            }
+        },
+        {
+            index: 3,
+            texto: "Indicar el nombre del navigator",
+            fnInput: function (pro, input) {
+                return pro.setNavigatorName(input);
+            },
+            fnPostInput: function (pro) {
+                let s = pro.getNavigatorName();
+                console.log("Navigaotr name " + s);
+            }
+        },
+        {
+            index: 5,
+            texto: "Evaluar condicional",
+            fnInput: null,
+            fnPostInput: function (pro) {
+                pro.req05_printNombre();
+            }
+        },
+        {
+            index: 6,
+            texto: "Print all the characters of the driver's name, separated by a space and in capitals ie. \"J O H N\"",
+            fnInput: null,
+            fnPostInput: function (pro) {
+                pro.req_06_printall();
+            }
+        }
+        ,
+        {
+            index: 7,
+            texto: "Print all the characters of the navigator's name, in reverse order. ie. \"nhoJ\"",
+            fnInput: null,
+            fnPostInput: function (pro) {
+                pro.req_07_printAllRev();
+            }
+        },
+        {
+            index: 8,
+            texto: "Depending on the lexicographic order of the strings, print:",
+            fnInput: null,
+            fnPostInput: function (pro) {
+                pro.req_08_ordenarLexical()
+            }
+        },
+        {
+            index: 9,
+            texto: "Ask the user for a new string and check if it's a Palindrom",
+            fnInput: function (pro,input) {
+
+                let isPal= pro.req_09_checkPalindrome(input);
+
+                console.log(isPal ? 'Si es' : 'No es')
+            },
+            fnPostInput: null
+
+        },
+        {
+            index: 10,
+            texto: "Lorem itmsu - con el texto proporcionoado contar ocurrencias de la palabra et",
+            fnInput: function (pro,input) {
+                return pro.req_10_loremipsum(input);
+            },
+            fnPostInput: null
+        }
+
+
+    ];
+
+
+    let textoOpciones = listaOpciones.reduce((texto, itemOpcion) => {
+        return texto + '\n' + itemOpcion.index + " .-" + itemOpcion.texto;
+    }, 'Seleccionar el número de opción');
+
+
+    document.querySelector("#panInstrucciones").innerHTML = textoOpciones;
+
+
+    function ejecutarOpcion(indexOpcion) {
+
+
+        //buscar que opcion es...
+        let listaMatch = listaOpciones.filter((opcion) => {
+            return opcion.index.toString() === indexOpcion.toString();
+        });
+
+        if (listaMatch.length === 0) {
+            console.log(`No se encontró la opción "${indexOpcion}" , elegir otra opción`)
+        } else {
+            let opcion = listaMatch[0];
+
+
+            let dataInput = null;
+
+            if (opcion.fnInput !== null) {
+                dataInput = window.prompt(opcion.texto);
+                opcion.fnInput(pro, dataInput);
+            }
+
+            if (opcion.fnPostInput !== null) {
+                opcion.fnPostInput(pro);
+            }
+
+        }
+
+    }
+
+</script>
+</body>
+</html>
